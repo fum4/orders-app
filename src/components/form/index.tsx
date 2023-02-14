@@ -82,6 +82,8 @@ export default component$(() => {
       <form
         onSubmit$={handleSubmit}
         class='grid grid-cols-1 gap-4 xs:w-full md:w-96 mx-auto'
+        data-netlify='true'
+        name='order'
       >
         {inputs.map((input) => (
           <span>
