@@ -24,7 +24,7 @@ export default component$(() => {
     measurementId: 'G-BGK89ETBLC'
   };
 
-  const app = initializeApp(firebaseConfig);
+  initializeApp(firebaseConfig); // TODO
 
   return (
     <QwikCityProvider>
