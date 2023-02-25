@@ -92,7 +92,7 @@ export const inputs/*: Input[]**/ = [
   },
 ];
 
-export const useFormSubmit = action$(async(/*data**/) => {
+export const useFormSubmit = action$((/*data**/) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -115,7 +115,7 @@ export const useFormSubmit = action$(async(/*data**/) => {
     text: 'Hi from your nodemailer project'
   };
 
-  transporter.sendMail(mailOptions, (err: string, data: any) => {
+  transporter.sendMail(mailOptions, (err: any, data: any) => {
     if (err) {
       console.log("Error " + err);
     } else {
