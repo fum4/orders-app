@@ -94,6 +94,7 @@ export const inputs/*: Input[]**/ = [
 
 export const useFormSubmit = action$((/*data**/) => {
   const transporter = nodemailer.createTransport({
+    // @ts-ignore
     service: 'gmail',
     auth: {
       type: 'OAuth2',
