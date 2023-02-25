@@ -28,6 +28,7 @@
     "@types/eslint": "8.21.1",
     "@types/node": "^18.14.0",
     "@types/node-fetch": "latest",
+    "@types/nodemailer": "^6.4.7",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
     "autoprefixer": "^10.4.13",
@@ -42,5 +43,8 @@
     "undici": "5.20.0",
     "vite": "4.1.4",
     "vite-tsconfig-paths": "3.5.0"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.1"
   }
 }

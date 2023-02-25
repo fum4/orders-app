@@ -7,6 +7,7 @@ specifiers:
   '@types/eslint': 8.21.1
   '@types/node': ^18.14.0
   '@types/node-fetch': latest
+  '@types/nodemailer': ^6.4.7
   '@typescript-eslint/eslint-plugin': 5.53.0
   '@typescript-eslint/parser': 5.53.0
   autoprefixer: ^10.4.13
@@ -14,6 +15,7 @@ specifiers:
   eslint-plugin-qwik: 0.19.2
   netlify-cli: ^12.0.11
   node-fetch: 3.3.0
+  nodemailer: ^6.9.1
   postcss: ^8.4.16
   prettier: 2.8.4
   tailwindcss: ^3.1.8
@@ -22,6 +24,9 @@ specifiers:
   vite: 4.1.4
   vite-tsconfig-paths: 3.5.0
 
+dependencies:
+  nodemailer: 6.9.1
+
 devDependencies:
   '@builder.io/qwik': 0.19.2_undici@5.20.0
   '@builder.io/qwik-city': 0.4.0_@builder.io+qwik@0.19.2
@@ -29,6 +34,7 @@ devDependencies:
   '@types/eslint': 8.21.1
   '@types/node': 18.14.1
   '@types/node-fetch': 2.6.2
+  '@types/nodemailer': 6.4.7
   '@typescript-eslint/eslint-plugin': 5.53.0_ny4s7qc6yg74faf3d6xty2ofzy
   '@typescript-eslint/parser': 5.53.0_7kw3g6rralp5ps6mg3uyzz6azm
   autoprefixer: 10.4.13_postcss@8.4.21
@@ -1584,6 +1590,12 @@ packages:
 
   /@types/node/18.14.1:
     resolution: {integrity: sha512-QH+37Qds3E0eDlReeboBxfHbX9omAcBCXEzswCu6jySP642jiM3cYSIkU/REqwhCUqXdonHFuBfJDiAJxMNhaQ==}
+    dev: true
+
+  /@types/nodemailer/6.4.7:
+    resolution: {integrity: sha512-f5qCBGAn/f0qtRcd4SEn88c8Fp3Swct1731X4ryPKqS61/A3LmmzN8zaEz7hneJvpjFbUUgY7lru/B/7ODTazg==}
+    dependencies:
+      '@types/node': 18.14.1
     dev: true
 
   /@types/normalize-package-data/2.4.1:
@@ -7178,6 +7190,11 @@ packages:
       path-exists: 4.0.0
       semver: 7.3.8
     dev: true
+
+  /nodemailer/6.9.1:
+    resolution: {integrity: sha512-qHw7dOiU5UKNnQpXktdgQ1d3OFgRAekuvbJLcdG5dnEo/GtcTHRYM7+UfJARdOFU9WUQO8OiIamgWPmiSFHYAA==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /noop2/2.0.0:
     resolution: {integrity: sha512-2bu7Pfpf6uNqashWV8P7yYeutQ3XkLY9MBSYI5sOAFZxuWcW/uJfLbKj5m6SvMDT9U1Y0C+7UFG+7VSiIdXjtA==}

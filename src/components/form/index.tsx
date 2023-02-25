@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { action$, Form } from '@builder.io/qwik-city';
-// import nodemailer from 'node-mailer';
+import nodemailer from 'nodemailer';
 // import { z } from 'zod';
 
 // const Input = z.object({
@@ -93,37 +93,35 @@ export const inputs/*: Input[]**/ = [
 ];
 
 export const useFormSubmit = action$(async(/*data**/) => {
-  // console.log('@@@ data', data);
-  // // ev?.preventDefault();
-  // // ev?.stopPropagation();
-  // const testAccount = await nodemailer.createTestAccount();
-  //
-  // // create reusable transporter object using the default SMTP transport
-  // const transporter = nodemailer.createTransport({
-  //   host: "smtp.ethereal.email",
-  //   port: 587,
-  //   secure: false, // true for 465, false for other ports
-  //   auth: {
-  //     user: testAccount.user, // generated ethereal user
-  //     pass: testAccount.pass, // generated ethereal password
-  //   },
-  // });
-  //
-  // // send mail with defined transport object
-  // const info = await transporter.sendMail({
-  //   from: '"Fred Foo 👻" <foo@example.com>', // sender address
-  //   to: "andronache.alex22@gmail.com", // list of receivers
-  //   subject: "Hello ✔", // Subject line
-  //   text: "Hello world?", // plain text body
-  //   html: "<b>Hello world?</b>", // html body
-  // });
-  //
-  // console.log("Message sent: %s", info.messageId);
-  // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-  //
-  // // Preview only available when sending through an Ethereal account
-  // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-  // // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      type: 'OAuth2',
+      user: process.env.MAIL_USERNAME,
+      pass: process.env.MAIL_PASSWORD,
+      // clientId: process.env.OAUTH_CLIENTID,
+      clientId: '310087801860-809uuifvceu0cnb1r7ufhsmmjgu3jork.apps.googleusercontent.com',
+      // clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      clientSecret: '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',
+      // refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+      refreshToken: '1//04B8l3q32tgJ3CgYIARAAGAQSNwF-L9IrHnNFkVJ-H_5dY26yLSU__Y1z0pEkcX7dwb4SJ-2522XmU2fb1jFcl67g9-44p3hjrcE'
+    }
+  });
+
+  const mailOptions = {
+    from: 'andronache.alex22@gmail.com',
+    to: 'andronache.alex22@gmail.com',
+    subject: 'Nodemailer Project',
+    text: 'Hi from your nodemailer project'
+  };
+
+  transporter.sendMail(mailOptions, (err: string, data: any) => {
+    if (err) {
+      console.log("Error " + err);
+    } else {
+      console.log("Email sent successfully", data);
+    }
+  });
 
   return { success: true };
 });
