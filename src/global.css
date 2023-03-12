@@ -20,7 +20,13 @@
 body {
   background-color: #fafafa;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  padding: 20px 20px 40px 20px;
+  padding: 0;
+}
+
+@media only screen and (min-width: 600px) {
+  body {
+    padding: 20px 20px 40px 20px;
+  }
 }
 
 main {
@@ -37,27 +43,14 @@ h2 {
   margin: 0 0 5px 0;
 }
 
-.lightning {
-  filter: hue-rotate(180deg);
-}
-
 section {
   padding: 20px;
-  border-bottom: 10px solid var(--qwik-dark-blue);
 }
 
-ul {
-  list-style-type: square;
-  margin: 5px 0 30px 0;
-  padding-left: 25px;
-}
-
-li {
-  padding: 8px 0;
-}
-
-li::marker {
-  color: var(--qwik-light-blue);
+@media only screen and (min-width: 600px) {
+  section {
+    border-bottom: 10px solid var(--qwik-dark-purple);
+  }
 }
 
 a,
@@ -67,28 +60,6 @@ a:visited {
 
 a:hover {
   text-decoration: none;
-}
-
-table.commands {
-  margin: 0 0 30px 0;
-}
-
-.commands td {
-  padding: 5px;
-}
-
-.commands td:first-child {
-  white-space: nowrap;
-  padding-right: 20px;
-}
-
-code {
-  font-family: Menlo, Monaco, Courier New, monospace;
-  font-size: 0.9em;
-  background-color: rgb(224, 224, 224);
-  padding: 2px 4px;
-  border-radius: 3px;
-  border-bottom: 2px solid #bfbfbf;
 }
 
 footer {
@@ -103,28 +74,4 @@ footer a {
 
 footer a:hover {
   text-decoration: underline;
-}
-
-a.mindblow,
-a.todolist {
-  margin: 10px auto;
-  display: block;
-  background: var(--qwik-dark-purple);
-  padding: 10px 20px 14px;
-  border-radius: 10px;
-  border: 0;
-  color: white;
-  text-decoration: none;
-  font-size: 20px;
-  width: fit-content;
-  box-shadow: inset 0px -4px 0px black;
-  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>🤯</text></svg>")
-      16 0,
-    auto; /*!emojicursor.app*/
-}
-
-a.mindblow:hover,
-a.todolist:hover {
-  box-shadow: inset 0px 4px 0px white;
-  padding: 14px 20px 10px;
 }

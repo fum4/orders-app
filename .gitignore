@@ -6,6 +6,7 @@
 
 # Development
 node_modules
+.env.local
 
 # Cache
 .cache
@@ -39,3 +40,6 @@ lerna-debug.log*
 
 # Netlify
 .netlify
+
+# Vercel
+.vercel
