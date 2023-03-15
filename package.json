@@ -27,9 +27,9 @@
     "@types/eslint": "8.21.1",
     "@types/node": "^18.15.0",
     "@types/node-fetch": "latest",
-    "@types/nodemailer": "^6.4.7",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
+    "@vercel/node": "^2.9.12",
     "autoprefixer": "^10.4.14",
     "eslint": "8.34.0",
     "eslint-plugin-qwik": "0.19.2",
@@ -44,7 +44,6 @@
     "vite-tsconfig-paths": "3.5.0"
   },
   "dependencies": {
-    "firebase": "^9.17.2",
-    "nodemailer": "^6.9.1"
+    "firebase": "^9.17.2"
   }
 }

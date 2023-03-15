@@ -1,10 +1,9 @@
 import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { globalAction$, Form, zod$, z } from '@builder.io/qwik-city';
 import { collection, addDoc, getCountFromServer } from 'firebase/firestore';
-import nodemailer from 'nodemailer';
 
 import { db } from '~/firebase'
-import { logError, logMessage } from "~/utils";
+import { logError } from "~/utils";
 
 const getFieldById = (id: string) => fields.find((input) => input.id === id) as Field;
 const getFieldOptionsById = (id: string) => getFieldById(id)?.options as string[];
@@ -92,7 +91,7 @@ const validationSchema = zod$({
   name: z.string().min(3),
   phoneNumber: z.string().min(10),
   details: z.string(),
-})
+});
 
 export const useFormSubmit = globalAction$(async(data) => {
   try {
@@ -101,48 +100,35 @@ export const useFormSubmit = globalAction$(async(data) => {
     const snapshot = await getCountFromServer(orders);
     const orderNo = snapshot.data().count;
 
-    const mailTransporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: import.meta.env.VITE_MAIL_SENDER,
-        pass: import.meta.env.VITE_MAIL_PASSWORD
-      }
-    });
-
-    const body = `
-      <table>
-        <tr>
-          <th>Comanda #${orderNo}</th>
-        </tr>
-        ${Object.entries(data).reduce((acc, [ key, value ]) => (
-          `
-            ${acc}
-            <tr>
-              <td>${getFieldLabelById(key)}</td>
-              <td>${value}</td>
-            </tr>
-          `
-        ), '')}
-      </table>
-    `;
-
     const mailDetails = {
       from: import.meta.env.VITE_MAIL_SENDER,
       to: import.meta.env.VITE_MAIL_RECEIVER,
       subject: `Comanda nr. ${orderNo}`,
-      html: body
+      html: `
+        <table>
+          <tr>
+            <th>Comanda #${orderNo}</th>
+          </tr>
+          ${Object.entries(data).reduce((acc, [key, value]) => (
+            `
+              ${acc}
+              <tr>
+                <td>${getFieldLabelById(key)}</td>
+                <td>${value}</td>
+              </tr>
+            `
+          ), '')}
+        </table>
+      `
     };
 
-    mailTransporter.sendMail(mailDetails, function(err) {
-      if (err) {
-        logError('Email send failed', err);
-      } else {
-        logMessage('Email sent successfully');
-      }
+    await fetch(import.meta.env.VITE_SEND_EMAIL_ENDPOINT, {
+      method: 'POST',
+      body: JSON.stringify(mailDetails)
     });
 
     return { success: true };
-  } catch(err) {
+  } catch (err) {
     logError(err);
     return { failed: true };
   }
