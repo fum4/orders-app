@@ -1,10 +1,10 @@
 import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { globalAction$, Form } from '@builder.io/qwik-city';
-import { collection, addDoc, getCountFromServer } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 
 import { db } from '~/firebase'
 import { logError } from "~/utils";
-import { getFieldLabelById, validationSchema, fields, type FieldId } from "~/fields";
+import { validationSchema, fields, type FieldId } from "~/fields";
 
 export const useFormSubmit = globalAction$(async(data) => {
   try {
@@ -14,35 +14,35 @@ export const useFormSubmit = globalAction$(async(data) => {
       completed: false,
     });
 
-    const snapshot = await getCountFromServer(orders);
-    const orderNo = snapshot.data().count;
+    // const snapshot = await getCountFromServer(orders);
+    // const orderNo = snapshot.data().count;
 
-    const mailDetails = {
-      from: import.meta.env.VITE_MAIL_SENDER,
-      to: import.meta.env.VITE_MAIL_RECEIVER,
-      subject: `Comanda nr. ${orderNo}`,
-      html: `
-        <table>
-          <tr>
-            <th>Comanda #${orderNo}</th>
-          </tr>
-          ${Object.entries(data).reduce((acc, [key, value]) => (
-            `
-              ${acc}
-              <tr>
-                <td>${getFieldLabelById(key)}</td>
-                <td>${value}</td>
-              </tr>
-            `
-          ), '')}
-        </table>
-      `
-    };
-
-    await fetch(import.meta.env.VITE_SEND_EMAIL_ENDPOINT, {
-      method: 'POST',
-      body: JSON.stringify(mailDetails)
-    });
+    // const mailDetails = {
+    //   from: import.meta.env.VITE_MAIL_SENDER,
+    //   to: import.meta.env.VITE_MAIL_RECEIVER,
+    //   subject: `Comanda nr. ${orderNo}`,
+    //   html: `
+    //     <table>
+    //       <tr>
+    //         <th>Comanda #${orderNo}</th>
+    //       </tr>
+    //       ${Object.entries(data).reduce((acc, [key, value]) => (
+    //         `
+    //           ${acc}
+    //           <tr>
+    //             <td>${getFieldLabelById(key)}</td>
+    //             <td>${value}</td>
+    //           </tr>
+    //         `
+    //       ), '')}
+    //     </table>
+    //   `
+    // };
+    //
+    // await fetch(import.meta.env.VITE_SEND_EMAIL_ENDPOINT, {
+    //   method: 'POST',
+    //   body: JSON.stringify(mailDetails)
+    // });
 
     return { success: true };
   } catch (err) {
