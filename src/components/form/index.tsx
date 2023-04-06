@@ -54,8 +54,8 @@ export const useFormSubmit = globalAction$(async(data) => {
 export default component$(() => {
   const action = useFormSubmit();
   const touched = useSignal<FieldId[]>([]);
-  const inputBaseClass = `h-10 w-full border-2 rounded-lg px-2`;
-  const inputDefaultClass = `${inputBaseClass} border-sky-100`;
+  const inputBaseClass = `h-10 w-full border-dashed border-2 rounded-lg px-2`;
+  const inputDefaultClass = `${inputBaseClass} border-purple-300`;
   const inputErrorClass = `${inputBaseClass} border-rose-500`;
 
   const isError = (key: FieldId) => action.value?.fieldErrors && Object.keys(action.value.fieldErrors).includes(key);
@@ -70,7 +70,7 @@ export default component$(() => {
 
   return (
     <section class='px-5'>
-      <h1 class='mx-auto xs:w-full md:w-96 text-3xl pb-10'>
+      <h1 class='mx-auto xs:w-full md:w-96 text-3xl mb-12'>
         Comandă nouă
       </h1>
       <Form
@@ -142,22 +142,28 @@ export default component$(() => {
           </span>
         ))}
         {/*<p className='text-gray-400 text-center'>Câmpurile marcate cu * sunt obligatorii.</p>*/}
+        <div className="h-10">
+          {action.value?.failed && (
+              <p class='text-rose-500 text-center'>Oops, a apărut o problemă</p>
+          )}
+          {action.value?.success && (
+            <>
+              <p class='text-green-600 text-center'>Comanda a fost trimisă cu succes!</p>
+              <p class='text-green-600 text-center'>Vă vom contacta în scurt timp.</p>
+            </>
+          )}
+        </div>
         <button
-          class='bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white rounded-lg w-1/2 mx-auto mt-6 mb-10 h-10'
+          className='bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white rounded-lg w-1/2 mx-auto mt-6 mb-10 h-10'
           type='submit'
         >
           Trimite comanda
         </button>
+        <div class='flex flex-col items-center'>
+          <p>sau</p>
+          <a class='mt-2 mb-8 text-purple-600' href="tel:+40756600176">+40 756 600 176</a>
+        </div>
       </Form>
-      {action.value?.success && (
-        <>
-          <p class='text-green-600 text-center'>Comanda a fost trimisă cu succes!</p>
-          <p class='text-green-600 text-center'>Veți fi contactat în scurt timp pentru confirmare.</p>
-        </>
-      )}
-      {action.value?.failed && (
-        <p class='text-rose-500 text-center'>A avut loc o problemă cu procesarea comenzii.</p>
-      )}
     </section>
   );
 });

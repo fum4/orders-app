@@ -22,7 +22,7 @@ export type FieldType = z.infer<typeof FieldType>;
 export const fields: Field[] = [
   {
     id: 'productName',
-    label: 'Denumire comandă',
+    label: 'Produs',
     type: 'dropdown',
     options: ['banana cake', 'red velvet', 'rahat turcesc'],
   },

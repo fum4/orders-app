@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 
 export default component$(() => (
   <header class='flex justify-center'>
-    <div class="logo">
+    <div>
       <a href="https://simturi.com" target="_blank" title="Simțuri">
         <img
           src='/logo.webp'
