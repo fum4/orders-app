@@ -34,7 +34,7 @@ export default component$(({ showCompleted }: Props) => {
           completed: true,
         });
 
-        orders.value = orders.value.filter((order) => order.id !== id);
+        orders.value = orders.value.filter((order: any) => order.id !== id);
 
         isCompletingOrder.value = false;
       } catch(err) {
@@ -68,10 +68,14 @@ export default component$(({ showCompleted }: Props) => {
                       <td class='w-40 p-2 border border-purple-200'>{getFieldLabelById(key)}</td>
                       {key === 'phoneNumber' ? (
                         <td class='border border-purple-200'>
+                          {/* @ts-ignore */}
                           <a class='mt-2 p-2 mb-8 text-purple-600' href={`tel:${value}`}>{value}</a>
                         </td>
                       ) : (
-                        <td class='p-2 break-all border border-purple-200'>{value}</td>
+                        <td class='p-2 break-all border border-purple-200'>
+                          {/* @ts-ignore */}
+                          {value}
+                        </td>
                       )}
                     </tr>
                   ))}

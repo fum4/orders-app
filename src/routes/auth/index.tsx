@@ -7,7 +7,7 @@ import { logError } from "~/utils";
 import Header from "~/components/header";
 
 export const useFormSubmit = globalAction$(async({ email, password }, { fail }) => (
-  signInWithEmailAndPassword(auth, email, password)
+  signInWithEmailAndPassword(auth, email as string, password as string)
     .then(() => {
       return { success: true };
     })
