@@ -24,23 +24,15 @@ export default component$(() => {
   const action = useFormSubmit();
   const goto = useNavigate();
 
-  // useVisibleTask$(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     // TODO: observer doesn't work
-  //     console.log('@@@@@ user ', user);
-  //     if (user) {
-  //       goto('/admin');
-  //     }
-  //   })
-  // });
-
-  onAuthStateChanged(getAuth(), (user) => {
-    // TODO: observer doesn't work
-    console.log('@@@@@ user ', user);
-    if (user) {
-      goto('/admin');
-    }
-  })
+  useVisibleTask$(() => {
+    onAuthStateChanged(auth, (user) => {
+      // TODO: observer doesn't work
+      console.log('@@@@@ user ', user);
+      if (user) {
+        goto('/admin');
+      }
+    })
+  });
 
   return (
     <div class="h-full flex flex-col pt-16 pb-24 mw-96 mh-96">

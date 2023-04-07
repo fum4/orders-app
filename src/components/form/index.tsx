@@ -160,7 +160,7 @@ export default component$(() => {
           Trimite comanda
         </button>
         <div class='flex flex-col items-center'>
-          <p>sau</p>
+          <p class='text-gray-400'>sau</p>
           <a class='mt-2 mb-8 text-purple-600' href="tel:+40756600176">+40 756 600 176</a>
         </div>
       </Form>
