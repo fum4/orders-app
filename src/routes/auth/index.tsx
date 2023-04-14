@@ -1,9 +1,19 @@
-import { component$, useVisibleTask$ } from "@builder.io/qwik";
-import { Form, globalAction$, useNavigate } from "@builder.io/qwik-city";
+import { component$ } from "@builder.io/qwik";
+import { Form, globalAction$ } from "@builder.io/qwik-city";
+
 import Header from "~/components/header";
 
-export const useFormSubmit = globalAction$(async({ email, password }, { fail }) => {
-  if (email === import.meta.env.USER_NAME && password === import.meta.env.USER_PASS) {
+export const useSignIn = globalAction$(({ user, password }, { redirect, cookie, fail }) => {
+  if (user === import.meta.env.VITE_USER_NAME && password === import.meta.env.VITE_USER_PASS) {
+    cookie.set('authenticated', 'true', {
+      path: '/',
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict'
+    });
+
+    redirect(302, '/admin');
+
     return { success: true };
   }
 
@@ -13,18 +23,7 @@ export const useFormSubmit = globalAction$(async({ email, password }, { fail }) 
 });
 
 export default component$(() => {
-  const action = useFormSubmit();
-  const navigate = useNavigate();
-
-  useVisibleTask$(({ track }) => {
-    // track(() => action.value?.success);
-    //
-    // console.log('@@@@@', action.value)
-    //
-    // if (action.value?.success) {
-      navigate('/admin');
-    // }
-  });
+  const signIn = useSignIn();
 
   return (
     <div class="h-full flex flex-col pt-16 pb-24 mw-96 mh-96">
@@ -34,7 +33,7 @@ export default component$(() => {
       </h1>
       <Form
         class='p-5'
-        action={action}
+        action={signIn}
       >
         <div class='flex flex-col items-center'>
           <div class='flex flex-col max-w-xs mb-3'>
@@ -42,15 +41,15 @@ export default component$(() => {
               for='email'
               class='text-gray-400 pl-2'
             >
-              Email
+              User
             </label>
             <input
               class='h-10 p-2 border-0 rounded-lg'
-              name='email'
-              type='email'
+              name='user'
+              type='text'
             />
           </div>
-          <div class='flex flex-col max-w-xs mb-10'>
+          <div class='flex flex-col max-w-xs mb-3'>
             <label
               for='password'
               class='text-gray-400 pl-2'
@@ -62,6 +61,11 @@ export default component$(() => {
               name='password'
               type='password'
             />
+          </div>
+          <div class="h-5 mb-7">
+            {signIn.value?.failed && (
+              <p class='text-rose-500 text-center'>Oops, a apărut o problemă</p>
+            )}
           </div>
           <button
             class='bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white rounded-lg py-2 px-4 h-10'

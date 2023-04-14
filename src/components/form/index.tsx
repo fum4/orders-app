@@ -6,7 +6,7 @@ import { db } from '~/firebase'
 import { logError } from "~/utils";
 import { validationSchema, fields, type FieldId } from "~/fields";
 
-export const useFormSubmit = globalAction$(async(data) => {
+export const useSendOrder = globalAction$(async(data) => {
   try {
     const orders = collection(db, 'orders');
     await addDoc(orders, {
@@ -52,19 +52,19 @@ export const useFormSubmit = globalAction$(async(data) => {
 }, validationSchema);
 
 export default component$(() => {
-  const action = useFormSubmit();
+  const sendOrder = useSendOrder();
   const touched = useSignal<FieldId[]>([]);
   const inputBaseClass = `h-10 w-full border-dashed border-2 rounded-lg px-2`;
   const inputDefaultClass = `${inputBaseClass} border-purple-300`;
   const inputErrorClass = `${inputBaseClass} border-rose-500`;
 
-  const isError = (key: FieldId) => action.value?.fieldErrors && Object.keys(action.value.fieldErrors).includes(key);
+  const isError = (key: FieldId) => sendOrder.value?.fieldErrors && Object.keys(sendOrder.value.fieldErrors).includes(key);
   const isTouched = (key: FieldId) => touched.value.includes(key);
 
   const touch = $((key: FieldId) => touched.value = [ ...touched.value, key ]);
 
   useVisibleTask$(({ track }) => {
-    track(() => action.value?.fieldErrors);
+    track(() => sendOrder.value?.fieldErrors);
 
     touched.value = [];
   });
@@ -76,7 +76,7 @@ export default component$(() => {
       </h1>
       <Form
         class='grid grid-cols-1 gap-4 xs:w-full md:w-96 mx-auto'
-        action={action}
+        action={sendOrder}
       >
         {fields.map((input) => (
           <span key={input.id}>
@@ -144,10 +144,10 @@ export default component$(() => {
         ))}
         {/*<p class='text-gray-400 text-center'>Câmpurile marcate cu * sunt obligatorii.</p>*/}
         <div class="h-10">
-          {action.value?.failed && (
+          {sendOrder.value?.failed && (
               <p class='text-rose-500 text-center'>Oops, a apărut o problemă</p>
           )}
-          {action.value?.success && (
+          {sendOrder.value?.success && (
             <>
               <p class='text-green-600 text-center'>Comanda a fost trimisă cu succes!</p>
               <p class='text-green-600 text-center'>Vă vom contacta în scurt timp.</p>

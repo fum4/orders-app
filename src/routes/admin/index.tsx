@@ -1,14 +1,41 @@
-import { $, component$, useSignal } from "@builder.io/qwik";
-import { useNavigate } from "@builder.io/qwik-city";
+import { $, component$ } from "@builder.io/qwik";
+import { routeAction$, routeLoader$, useNavigate } from "@builder.io/qwik-city";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
-import OrdersList from '~/components/orders-list';
+import OrdersList from "~/components/orders-list";
+import { db } from "~/firebase";
+
+export const useOrders = routeLoader$(async(requestEvent) => {
+  if (requestEvent.cookie.get('authenticated')) {
+    const ordersSnapshot = await query(
+      collection(db, 'orders'),
+      where('completed', '==', false)
+    );
+    const ordersDocs = await getDocs(ordersSnapshot);
+
+    return ordersDocs.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data()
+    }))
+  }
+
+  requestEvent.redirect(302, '/auth');
+});
+
+const useSignOut = routeAction$((_, { cookie, redirect }) => {
+  if (cookie.get('authenticated')) {
+    cookie.delete('authenticated', { path: '/' });
+  }
+
+  redirect(301, '/');
+});
 
 export default component$(() => {
-  const navigate = useNavigate();
-  const showCompletedOrders = useSignal<boolean>(false);
+  const signOut = useSignOut();
+  const orders = useOrders();
 
-  const handleSignOut = $(async() => {
-    navigate('/');
+  const handleSignOut = $(() => {
+    signOut.submit();
   });
 
   return (
@@ -26,7 +53,7 @@ export default component$(() => {
           Deconectează-te
         </button>
       </div>
-      <OrdersList showCompleted={showCompletedOrders.value} />
+      <OrdersList orders={orders.value} />
     </>
   );
 })

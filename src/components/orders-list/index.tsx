@@ -1,31 +1,15 @@
-import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
-import { collection, doc, getDocs, updateDoc, query, where } from 'firebase/firestore';
+import { $, component$, useSignal } from "@builder.io/qwik";
+import { doc, updateDoc } from 'firebase/firestore';
 
 import { db } from '~/firebase'
 import { getFieldLabelById } from '~/fields';
 
 interface Props {
-  showCompleted: boolean;
+  orders: any;
 }
 
-export default component$(({ showCompleted }: Props) => {
-  const orders = useSignal<any>([]);
+export default component$(({ orders = [] }: Props) => {
   const isCompletingOrder = useSignal<boolean>(false);
-
-  useTask$(async(/* { track } */) => {
-    // track((showCompleted) => showCompleted);
-
-    const ordersSnapshot = await query(
-      collection(db, 'orders'),
-      where('completed', '==', showCompleted)
-    );
-    const ordersDocs = await getDocs(ordersSnapshot);
-
-    orders.value = ordersDocs.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data()
-    }))
-  });
 
   const completeOrder = $(async(id: string) => {
     if (isCompletingOrder.value) {
@@ -34,7 +18,7 @@ export default component$(({ showCompleted }: Props) => {
           completed: true,
         });
 
-        orders.value = orders.value.filter((order: any) => order.id !== id);
+        orders = orders.filter((order: any) => order.id !== id);
 
         isCompletingOrder.value = false;
       } catch(err) {
@@ -57,7 +41,7 @@ export default component$(({ showCompleted }: Props) => {
         Ultimele comenzi
       </h1>
       <div class='grid grid-cols-1 gap-20 xs:w-full md:w-96 mx-auto'>
-        {orders.value.map((order: any) => (
+        {orders?.map((order: any) => (
           <div class='flex flex-col items-center'>
             <table class='mx-auto'>
               <tbody>
