@@ -1,39 +1,14 @@
-import { $, component$, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
-import { getAuth, signOut } from "firebase/auth";
+import { $, component$, useSignal } from "@builder.io/qwik";
+import { useNavigate } from "@builder.io/qwik-city";
 
 import OrdersList from '~/components/orders-list';
-import { auth } from '~/firebase';
-import { useNavigate } from "@builder.io/qwik-city";
-import { logError } from "~/utils";
 
 export default component$(() => {
   const navigate = useNavigate();
   const showCompletedOrders = useSignal<boolean>(false);
 
   const handleSignOut = $(async() => {
-    try {
-      await signOut(auth);
-    } catch (er) {
-      logError(err);
-    }
-
     navigate('/');
-  });
-
-  useTask$(() => {
-    // const auth = getAuth();
-console.log('@@@@ currentUser', auth.currentUser)
-    if (!auth.currentUser) {
-      navigate('/auth');
-    }
-  });
-
-  useVisibleTask$(() => {
-    // const auth = getAuth();
-    console.log('@@@@ currentUser', auth.currentUser)
-    if (!auth.currentUser) {
-      navigate('/auth');
-    }
   });
 
   return (

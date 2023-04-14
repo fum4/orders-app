@@ -1,9 +1,8 @@
-import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$, useVisibleTask$, useSignal } from "@builder.io/qwik";
 import { globalAction$, Form } from '@builder.io/qwik-city';
 import { collection, addDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
 
-import { db, auth } from '~/firebase'
+import { db } from '~/firebase'
 import { logError } from "~/utils";
 import { validationSchema, fields, type FieldId } from "~/fields";
 
@@ -64,11 +63,9 @@ export default component$(() => {
 
   const touch = $((key: FieldId) => touched.value = [ ...touched.value, key ]);
 
-
-
   useVisibleTask$(({ track }) => {
     track(() => action.value?.fieldErrors);
-    console.log('####### ', auth.currentUser);
+
     touched.value = [];
   });
 

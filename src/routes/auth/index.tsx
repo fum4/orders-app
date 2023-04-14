@@ -1,39 +1,20 @@
-import { component$, useVisibleTask$ } from "@builder.io/qwik";
-import { Form, globalAction$, useNavigate } from "@builder.io/qwik-city";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { component$ } from "@builder.io/qwik";
+import { Form, globalAction$ /* useNavigate */ } from "@builder.io/qwik-city";
 import Header from "~/components/header";
-import { auth } from "~/firebase";
-import { logError } from "~/utils";
-
-// const auth = getAuth();
 
 export const useFormSubmit = globalAction$(async({ email, password }, { fail }) => {
-  signInWithEmailAndPassword(auth, email as string, password as string)
-    .then(() => {
-      return { success: true };
-    })
-    .catch((err) => {
-      logError(err);
+  if (email && password) {
+    return { success: true };
+  }
 
-      return fail(404, {
-        message: 'User not found'
-      });
-    })
+  return fail(404, {
+    message: 'User not found'
+  });
 });
 
 export default component$(() => {
   const action = useFormSubmit();
-  const goto = useNavigate();
-
-  useVisibleTask$(() => {
-    onAuthStateChanged(auth, (user) => {
-      // TODO: observer doesn't work
-      console.log('@@@@@ user ', user);
-      if (user) {
-        goto('/admin');
-      }
-    })
-  });
+  // const goto = useNavigate();
 
   return (
     <div class="h-full flex flex-col pt-16 pb-24 mw-96 mh-96">
