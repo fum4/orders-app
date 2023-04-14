@@ -1,9 +1,9 @@
-import { component$ } from "@builder.io/qwik";
-import { Form, globalAction$ /* useNavigate */ } from "@builder.io/qwik-city";
+import { component$, useVisibleTask$ } from "@builder.io/qwik";
+import { Form, globalAction$, useNavigate } from "@builder.io/qwik-city";
 import Header from "~/components/header";
 
 export const useFormSubmit = globalAction$(async({ email, password }, { fail }) => {
-  if (email === import.meta.env.USER_NAME && password === import.meta.env_USER_PASS) {
+  if (email === import.meta.env.USER_NAME && password === import.meta.env.USER_PASS) {
     return { success: true };
   }
 
@@ -14,7 +14,17 @@ export const useFormSubmit = globalAction$(async({ email, password }, { fail }) 
 
 export default component$(() => {
   const action = useFormSubmit();
-  // const goto = useNavigate();
+  const navigate = useNavigate();
+
+  useVisibleTask$(({ track }) => {
+    track(() => action.value?.success);
+
+    console.log('@@@@@', action.value)
+
+    if (action.value?.success) {
+      navigate('/admin');
+    }
+  });
 
   return (
     <div class="h-full flex flex-col pt-16 pb-24 mw-96 mh-96">
