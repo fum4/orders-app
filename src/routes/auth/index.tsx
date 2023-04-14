@@ -63,6 +63,7 @@ export default component$(() => {
             />
           </div>
           <div class="h-5 mb-7">
+            {/*@ts-ignore*/}
             {signIn.value?.failed && (
               <p class='text-rose-500 text-center'>Oops, a apărut o problemă</p>
             )}
