@@ -3,7 +3,7 @@ import { Form, globalAction$ /* useNavigate */ } from "@builder.io/qwik-city";
 import Header from "~/components/header";
 
 export const useFormSubmit = globalAction$(async({ email, password }, { fail }) => {
-  if (email && password) {
+  if (email === import.meta.env.USER_NAME && password === import.meta.env_USER_PASS) {
     return { success: true };
   }
 
