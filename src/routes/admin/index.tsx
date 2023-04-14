@@ -53,7 +53,7 @@ export default component$(() => {
           Deconectează-te
         </button>
       </div>
-      <OrdersList orders={orders.value} />
+      <OrdersList orders={orders} />
     </>
   );
 })

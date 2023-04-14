@@ -8,7 +8,7 @@ interface Props {
   orders: any;
 }
 
-export default component$(({ orders = [] }: Props) => {
+export default component$(({ orders }: Props) => {
   const isCompletingOrder = useSignal<boolean>(false);
 
   const completeOrder = $(async(id: string) => {
@@ -18,7 +18,7 @@ export default component$(({ orders = [] }: Props) => {
           completed: true,
         });
 
-        orders = orders.filter((order: any) => order.id !== id);
+        orders.value = orders.value.filter((order: any) => order.id !== id);
 
         isCompletingOrder.value = false;
       } catch(err) {
@@ -41,7 +41,7 @@ export default component$(({ orders = [] }: Props) => {
         Ultimele comenzi
       </h1>
       <div class='grid grid-cols-1 gap-20 xs:w-full md:w-96 mx-auto'>
-        {orders?.map((order: any) => (
+        {orders.value?.map((order: any) => (
           <div class='flex flex-col items-center'>
             <table class='mx-auto'>
               <tbody>
