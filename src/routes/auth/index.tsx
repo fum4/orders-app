@@ -17,13 +17,13 @@ export default component$(() => {
   const navigate = useNavigate();
 
   useVisibleTask$(({ track }) => {
-    track(() => action.value?.success);
-
-    console.log('@@@@@', action.value)
-
-    if (action.value?.success) {
+    // track(() => action.value?.success);
+    //
+    // console.log('@@@@@', action.value)
+    //
+    // if (action.value?.success) {
       navigate('/admin');
-    }
+    // }
   });
 
   return (
