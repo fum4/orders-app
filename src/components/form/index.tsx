@@ -142,8 +142,8 @@ export default component$(() => {
            )}
           </span>
         ))}
-        {/*<p className='text-gray-400 text-center'>Câmpurile marcate cu * sunt obligatorii.</p>*/}
-        <div className="h-10">
+        {/*<p class='text-gray-400 text-center'>Câmpurile marcate cu * sunt obligatorii.</p>*/}
+        <div class="h-10">
           {action.value?.failed && (
               <p class='text-rose-500 text-center'>Oops, a apărut o problemă</p>
           )}
@@ -155,7 +155,7 @@ export default component$(() => {
           )}
         </div>
         <button
-          className='bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white rounded-lg w-1/2 mx-auto mt-6 mb-10 h-10'
+          class='bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white rounded-lg w-1/2 mx-auto mt-6 mb-10 h-10'
           type='submit'
         >
           Trimite comanda

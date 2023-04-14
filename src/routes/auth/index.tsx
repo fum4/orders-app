@@ -19,7 +19,7 @@ export default component$(() => {
   return (
     <div class="h-full flex flex-col pt-16 pb-24 mw-96 mh-96">
       <Header />
-      <h1 className='mx-auto xs:w-full md:w-96 text-3xl my-6 text-center'>
+      <h1 class='mx-auto xs:w-full md:w-96 text-3xl my-6 text-center'>
         Autentificare
       </h1>
       <Form
@@ -30,7 +30,7 @@ export default component$(() => {
           <div class='flex flex-col max-w-xs mb-3'>
             <label
               for='email'
-              className='text-gray-400 pl-2'
+              class='text-gray-400 pl-2'
             >
               Email
             </label>
@@ -40,10 +40,10 @@ export default component$(() => {
               type='email'
             />
           </div>
-          <div className='flex flex-col max-w-xs mb-10'>
+          <div class='flex flex-col max-w-xs mb-10'>
             <label
               for='password'
-              className='text-gray-400 pl-2'
+              class='text-gray-400 pl-2'
             >
               Parolă
             </label>
@@ -54,7 +54,7 @@ export default component$(() => {
             />
           </div>
           <button
-            className='bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white rounded-lg py-2 px-4 h-10'
+            class='bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white rounded-lg py-2 px-4 h-10'
             type='submit'
           >
             Conectează-te
