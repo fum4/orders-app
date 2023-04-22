@@ -46,7 +46,7 @@ export const useSignIn = globalAction$(async({ user, password }, { redirect, coo
         sameSite: 'strict'
       });
 
-      return redirect(302, `/admin`);
+      return redirect(302, `/admin/?userId=${dbUser.id}`);
     } catch(err) {
       console.error(err);
     }
