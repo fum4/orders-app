@@ -34,7 +34,7 @@ export const useOrders = routeLoader$((requestEvent) => {
   //   return;
   // })()
 
-  return;
+  return {};
 });
 
 const useSignOut = routeAction$((_, { cookie, redirect }) => {
