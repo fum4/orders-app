@@ -24,22 +24,26 @@ export const silentSignIn = server$(async function(userId: string) {
 });
 
 export const useSignIn = globalAction$(async({ user, password }, { redirect, cookie, fail }) => {
+  console.log('@@@@@@  1')
   const usersSnapshot = await query(
     collection(db, 'users'),
     where('user', '==', user),
     where('password', '==', password)
   );
+  console.log('@@@@@@ 2')
 
   const users = await getDocs(usersSnapshot);
   const dbUser = users.docs[0];
-
+console.log('@@@@@@ 3')
   if (dbUser) {
+    console.log('@@@@@@ 4')
     const nonsenseToken = nanoid();
 
     try {
       await updateDoc(doc(db, 'users', dbUser.id), {
         token: nonsenseToken,
       });
+      console.log('@@@@@@ 5')
 
       cookie.set('token', nonsenseToken, {
         path: '/',
@@ -47,6 +51,7 @@ export const useSignIn = globalAction$(async({ user, password }, { redirect, coo
         secure: true,
         sameSite: 'strict'
       });
+      console.log('@@@@@@ 6')
 
       redirect(302, `/admin?userId=${dbUser.id}`);
 
