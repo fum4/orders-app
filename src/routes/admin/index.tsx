@@ -7,30 +7,31 @@ import { db } from "~/firebase";
 
 export const useOrders = routeLoader$((requestEvent) => {
   (async() => {
-    const userId = requestEvent.cookie.get('userId')?.value;
-
-    if (userId) {
-      const userSnapshot = await getDoc(doc(db, 'users', userId));
-
-      if (userSnapshot.exists()) {
-        const { token } = userSnapshot.data();
-
-        if (requestEvent.cookie.get('token')?.value === token) {
-          const ordersSnapshot = await query(
-            collection(db, 'orders'),
-            where('completed', '==', false)
-          );
-          const ordersDocs = await getDocs(ordersSnapshot);
-
-          return ordersDocs.docs.map((doc) => ({
-            id: doc.id,
-            data: doc.data()
-          }))
-        }
-      }
-    }
-
-    return requestEvent.redirect(302, '/auth');
+    // const userId = requestEvent.cookie.get('userId')?.value;
+    //
+    // if (userId) {
+    //   const userSnapshot = await getDoc(doc(db, 'users', userId));
+    //
+    //   if (userSnapshot.exists()) {
+    //     const { token } = userSnapshot.data();
+    //
+    //     if (requestEvent.cookie.get('token')?.value === token) {
+    //       const ordersSnapshot = await query(
+    //         collection(db, 'orders'),
+    //         where('completed', '==', false)
+    //       );
+    //       const ordersDocs = await getDocs(ordersSnapshot);
+    //
+    //       return ordersDocs.docs.map((doc) => ({
+    //         id: doc.id,
+    //         data: doc.data()
+    //       }))
+    //     }
+    //   }
+    // }
+    //
+    // return requestEvent.redirect(302, '/auth');
+    return;
   })()
 });
 
@@ -69,7 +70,7 @@ export default component$(() => {
           Deconectează-te
         </button>
       </div>
-      <OrdersList orders={orders} />
+      {/*<OrdersList orders={orders} />*/}
     </>
   );
 })
