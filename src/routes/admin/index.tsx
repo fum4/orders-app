@@ -7,15 +7,15 @@ import { db } from "~/firebase";
 
 export const useOrders = routeLoader$((requestEvent) => {
   (async() => {
-    const userId = requestEvent.cookie.get('userId')?.value;
-
-    if (userId) {
-      const userSnapshot = await getDoc(doc(db, 'users', userId));
-
-      if (userSnapshot.exists()) {
-        const { token } = userSnapshot.data();
-
-        if (requestEvent.cookie.get('token')?.value === token) {
+    // const userId = requestEvent.cookie.get('userId')?.value;
+    //
+    // if (userId) {
+    //   const userSnapshot = await getDoc(doc(db, 'users', userId));
+    //
+    //   if (userSnapshot.exists()) {
+    //     const { token } = userSnapshot.data();
+    //
+    //     if (requestEvent.cookie.get('token')?.value === token) {
           const ordersSnapshot = await query(
             collection(db, 'orders'),
             where('completed', '==', false)
@@ -26,11 +26,11 @@ export const useOrders = routeLoader$((requestEvent) => {
             id: doc.id,
             data: doc.data()
           }));
-        }
-      }
-    }
-
-    return requestEvent.redirect(302, '/auth');
+    //     }
+    //   }
+    // }
+    //
+    // return requestEvent.redirect(302, '/auth');
   })()
 });
 
