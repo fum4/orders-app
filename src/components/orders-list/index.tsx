@@ -46,6 +46,7 @@ export default component$(({ orders }: Props) => {
             <table class='mx-auto'>
               <tbody>
                 {Object.entries(order.data)
+                  .sort()
                   .filter(([ key ]) => !['completed'].includes(key))
                   .map(([ key, value ]) => (
                     <tr class='odd:bg-purple-50 odd:bg-opacity-50'>

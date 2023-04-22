@@ -1,20 +1,59 @@
-import { component$ } from "@builder.io/qwik";
-import { Form, globalAction$ } from "@builder.io/qwik-city";
+import { component$, useVisibleTask$ } from "@builder.io/qwik";
+import { Form, globalAction$, server$, useNavigate } from "@builder.io/qwik-city";
+import { collection, getDocs, updateDoc, query, where, doc, getDoc } from "firebase/firestore";
+import { nanoid } from "nanoid";
 
 import Header from "~/components/header";
+import { db } from "~/firebase";
 
-export const useSignIn = globalAction$(({ user, password }, { redirect, cookie, fail }) => {
-  if (user === import.meta.env.VITE_USER_NAME && password === import.meta.env.VITE_USER_PASS) {
-    cookie.set('authenticated', 'true', {
-      path: '/',
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict'
-    });
+export const silentSignIn = server$(async function(userId: string) {
+  console.log('userId', userId);
+  console.log('y', this);
+  const userSnapshot = await getDoc(doc(db, 'users', userId));
 
-    redirect(302, '/admin');
+  if (userSnapshot.exists()) {
+    const { token } = userSnapshot.data();
 
-    return { success: true };
+    if (token === this.cookie.get('token')?.value) {
+      console.log('@@@@ everything ok');
+      return { success: true };
+    }
+  }
+
+  return { success: false };
+});
+
+export const useSignIn = globalAction$(async({ user, password }, { redirect, cookie, fail }) => {
+  const usersSnapshot = await query(
+    collection(db, 'users'),
+    where('user', '==', user),
+    where('password', '==', password)
+  );
+
+  const users = await getDocs(usersSnapshot);
+  const dbUser = users.docs[0];
+
+  if (dbUser) {
+    const nonsenseToken = nanoid();
+
+    try {
+      await updateDoc(doc(db, 'users', dbUser.id), {
+        token: nonsenseToken,
+      });
+
+      cookie.set('token', nonsenseToken, {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict'
+      });
+
+      redirect(302, `/admin?userId=${dbUser.id}`);
+
+      return { success: true };
+    } catch(err) {
+      console.error(err);
+    }
   }
 
   return fail(404, {
@@ -23,7 +62,22 @@ export const useSignIn = globalAction$(({ user, password }, { redirect, cookie, 
 });
 
 export default component$(() => {
+  const navigate = useNavigate();
   const signIn = useSignIn();
+
+  useVisibleTask$(() => {
+    (async() => {
+      const userId = localStorage.getItem('userId');
+
+      if (userId) {
+        const { success } = await silentSignIn(userId);
+
+        if (success) {
+          navigate(`/admin?userId=${userId}`)
+        }
+      }
+    })()
+  });
 
   return (
     <div class="h-full flex flex-col pt-16 pb-24 mw-96 mh-96">

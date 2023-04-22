@@ -1,30 +1,41 @@
-import { $, component$ } from "@builder.io/qwik";
-import { routeAction$, routeLoader$, useNavigate } from "@builder.io/qwik-city";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { $, component$, useVisibleTask$ } from "@builder.io/qwik";
+import { routeAction$, routeLoader$ } from "@builder.io/qwik-city";
+import { collection, doc, getDocs, query, where, getDoc } from "firebase/firestore";
 
 import OrdersList from "~/components/orders-list";
 import { db } from "~/firebase";
 
 export const useOrders = routeLoader$(async(requestEvent) => {
-  if (requestEvent.cookie.get('authenticated')) {
-    const ordersSnapshot = await query(
-      collection(db, 'orders'),
-      where('completed', '==', false)
-    );
-    const ordersDocs = await getDocs(ordersSnapshot);
+  const searchParams = new URLSearchParams(requestEvent.url.searchParams);
+  const userId = searchParams.get('userId');
 
-    return ordersDocs.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data()
-    }))
+  if (userId) {
+    const userSnapshot = await getDoc(doc(db, 'users', userId));
+
+    if (userSnapshot.exists()) {
+      const { token } = userSnapshot.data();
+
+      if (requestEvent.cookie.get('token')?.value === token) {
+        const ordersSnapshot = await query(
+          collection(db, 'orders'),
+          where('completed', '==', false)
+        );
+        const ordersDocs = await getDocs(ordersSnapshot);
+
+        return ordersDocs.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data()
+        }))
+      }
+    }
   }
 
   requestEvent.redirect(302, '/auth');
 });
 
 const useSignOut = routeAction$((_, { cookie, redirect }) => {
-  if (cookie.get('authenticated')) {
-    cookie.delete('authenticated', { path: '/' });
+  if (cookie.get('token')) {
+    cookie.delete('token', { path: '/' });
   }
 
   redirect(301, '/');
@@ -35,7 +46,18 @@ export default component$(() => {
   const orders = useOrders();
 
   const handleSignOut = $(() => {
+    localStorage.removeItem('userId');
+
     signOut.submit();
+  });
+
+  useVisibleTask$(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const userId = searchParams.get('userId');
+
+    if (userId) {
+      localStorage.setItem('userId', userId);
+    }
   });
 
   return (
