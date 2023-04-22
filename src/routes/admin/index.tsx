@@ -5,7 +5,7 @@ import { routeAction$, routeLoader$ } from "@builder.io/qwik-city";
 // import OrdersList from "~/components/orders-list";
 // import { db } from "~/firebase";
 
-export const useOrders = routeLoader$(async(requestEvent) => {
+export const useOrders = routeLoader$((requestEvent) => {
   // const userId = requestEvent.cookie.get('userId')?.value;
 
   // if (userId) {
