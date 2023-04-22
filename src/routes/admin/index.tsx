@@ -34,7 +34,7 @@ export const useOrders = routeLoader$(async(requestEvent) => {
     }
   }
 
-  return requestEvent.redirect(302, '/auth');
+  // return requestEvent.redirect(302, '/auth');
 });
 
 const useSignOut = routeAction$((_, { cookie, redirect }) => {
