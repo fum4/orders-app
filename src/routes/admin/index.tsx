@@ -1,37 +1,37 @@
 import { $, component$ } from "@builder.io/qwik";
-import { routeAction$, routeLoader$ } from "@builder.io/qwik-city";
-import { collection, doc, getDocs, query, where, getDoc } from "firebase/firestore";
+import { routeAction$, /*routeLoader$*/ } from "@builder.io/qwik-city";
+// import { collection, doc, getDocs, query, where, getDoc } from "firebase/firestore";
 
-import OrdersList from "~/components/orders-list";
+// import OrdersList from "~/components/orders-list";
 import { db } from "~/firebase";
 
-export const useOrders = routeLoader$(async(requestEvent) => {
-  console.log('@@@@@@ useOrders');
-  const userId = requestEvent.cookie.get('userId')?.value;
-
-  if (userId) {
-    const userSnapshot = await getDoc(doc(db, 'users', userId));
-
-    if (userSnapshot.exists()) {
-      const { token } = userSnapshot.data();
-
-      if (requestEvent.cookie.get('token')?.value === token) {
-        const ordersSnapshot = await query(
-          collection(db, 'orders'),
-          where('completed', '==', false)
-        );
-        const ordersDocs = await getDocs(ordersSnapshot);
-
-        return ordersDocs.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data()
-        }))
-      }
-    }
-  }
-
-  requestEvent.redirect(302, '/auth');
-});
+// export const useOrders = routeLoader$(async(requestEvent) => {
+//   console.log('@@@@@@ useOrders');
+//   const userId = requestEvent.cookie.get('userId')?.value;
+//
+//   if (userId) {
+//     const userSnapshot = await getDoc(doc(db, 'users', userId));
+//
+//     if (userSnapshot.exists()) {
+//       const { token } = userSnapshot.data();
+//
+//       if (requestEvent.cookie.get('token')?.value === token) {
+//         const ordersSnapshot = await query(
+//           collection(db, 'orders'),
+//           where('completed', '==', false)
+//         );
+//         const ordersDocs = await getDocs(ordersSnapshot);
+//
+//         return ordersDocs.docs.map((doc) => ({
+//           id: doc.id,
+//           data: doc.data()
+//         }))
+//       }
+//     }
+//   }
+//
+//   requestEvent.redirect(302, '/auth');
+// });
 
 const useSignOut = routeAction$((_, { cookie, redirect }) => {
   if (cookie.get('token')) {
