@@ -6,6 +6,7 @@ import OrdersList from "~/components/orders-list";
 import { db } from "~/firebase";
 
 export const useOrders = routeLoader$(async(requestEvent) => {
+  console.log('@@@@@@ useOrders');
   const userId = requestEvent.cookie.get('userId')?.value;
 
   if (userId) {
