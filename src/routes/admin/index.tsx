@@ -6,22 +6,26 @@ import OrdersList from "~/components/orders-list";
 import { db } from "~/firebase";
 
 export const useOrders = routeLoader$(async(requestEvent) => {
-  console.log('@@@@@@ useOrders');
+  console.error('@@@@@@ useOrders');
   const userId = requestEvent.cookie.get('userId')?.value;
 
   if (userId) {
+    console.error('@@@@@@ useOrders2');
     const userSnapshot = await getDoc(doc(db, 'users', userId));
 
     if (userSnapshot.exists()) {
+      console.error('@@@@@@ useOrders3');
       const { token } = userSnapshot.data();
 
       if (requestEvent.cookie.get('token')?.value === token) {
+        console.error('@@@@@@ useOrders4');
         const ordersSnapshot = await query(
           collection(db, 'orders'),
           where('completed', '==', false)
         );
         const ordersDocs = await getDocs(ordersSnapshot);
 
+        console.error('@@@@@@ useOrders5');
         return ordersDocs.docs.map((doc) => ({
           id: doc.id,
           data: doc.data()
@@ -30,7 +34,7 @@ export const useOrders = routeLoader$(async(requestEvent) => {
     }
   }
 
-  requestEvent.redirect(302, '/auth');
+  return requestEvent.redirect(302, '/auth');
 });
 
 const useSignOut = routeAction$((_, { cookie, redirect }) => {
