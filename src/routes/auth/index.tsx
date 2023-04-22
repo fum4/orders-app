@@ -34,7 +34,7 @@ export const useSignIn = globalAction$(async({ user, password }, { redirect, coo
 
   const users = await getDocs(usersSnapshot);
   const dbUser = users.docs[0];
-console.log('@@@@@@ 3')
+console.log('@@@@@@ 3', dbUser);
   if (dbUser) {
     console.log('@@@@@@ 4')
     const nonsenseToken = nanoid();
