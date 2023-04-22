@@ -1,40 +1,37 @@
 import { $, component$ } from "@builder.io/qwik";
 import { routeAction$, routeLoader$ } from "@builder.io/qwik-city";
-import { collection, doc, getDocs, query, where, getDoc } from "firebase/firestore";
-
-import OrdersList from "~/components/orders-list";
-import { db } from "~/firebase";
+// import { collection, doc, getDocs, query, where, getDoc } from "firebase/firestore";
+//
+// import OrdersList from "~/components/orders-list";
+// import { db } from "~/firebase";
 
 export const useOrders = routeLoader$(async(requestEvent) => {
-  console.error('@@@@@@ useOrders');
-  const userId = requestEvent.cookie.get('userId')?.value;
+  // const userId = requestEvent.cookie.get('userId')?.value;
 
-  if (userId) {
-    console.error('@@@@@@ useOrders2');
-    const userSnapshot = await getDoc(doc(db, 'users', userId));
-
-    if (userSnapshot.exists()) {
-      console.error('@@@@@@ useOrders3');
-      const { token } = userSnapshot.data();
-
-      if (requestEvent.cookie.get('token')?.value === token) {
-        console.error('@@@@@@ useOrders4');
-        const ordersSnapshot = await query(
-          collection(db, 'orders'),
-          where('completed', '==', false)
-        );
-        const ordersDocs = await getDocs(ordersSnapshot);
-
-        console.error('@@@@@@ useOrders5');
-        return ordersDocs.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data()
-        }))
-      }
-    }
-  }
-
+  // if (userId) {
+  //   const userSnapshot = await getDoc(doc(db, 'users', userId));
+  //
+  //   if (userSnapshot.exists()) {
+  //     const { token } = userSnapshot.data();
+  //
+  //     if (requestEvent.cookie.get('token')?.value === token) {
+  //       const ordersSnapshot = await query(
+  //         collection(db, 'orders'),
+  //         where('completed', '==', false)
+  //       );
+  //       const ordersDocs = await getDocs(ordersSnapshot);
+  //
+  //       return ordersDocs.docs.map((doc) => ({
+  //         id: doc.id,
+  //         data: doc.data()
+  //       }))
+  //     }
+  //   }
+  // }
+  //
   // return requestEvent.redirect(302, '/auth');
+
+  return { success: true };
 });
 
 const useSignOut = routeAction$((_, { cookie, redirect }) => {
@@ -72,7 +69,7 @@ export default component$(() => {
           Deconectează-te
         </button>
       </div>
-      <OrdersList orders={orders} />
+      {/*<OrdersList orders={orders} />*/}
     </>
   );
 })
