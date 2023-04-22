@@ -1,4 +1,4 @@
-import { $, component$, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$ } from "@builder.io/qwik";
 import { routeAction$, routeLoader$ } from "@builder.io/qwik-city";
 import { collection, doc, getDocs, query, where, getDoc } from "firebase/firestore";
 
@@ -6,8 +6,7 @@ import OrdersList from "~/components/orders-list";
 import { db } from "~/firebase";
 
 export const useOrders = routeLoader$(async(requestEvent) => {
-  const searchParams = new URLSearchParams(requestEvent.url.searchParams);
-  const userId = searchParams.get('userId');
+  const userId = requestEvent.cookie.get('userId')?.value;
 
   if (userId) {
     const userSnapshot = await getDoc(doc(db, 'users', userId));
@@ -38,6 +37,10 @@ const useSignOut = routeAction$((_, { cookie, redirect }) => {
     cookie.delete('token', { path: '/' });
   }
 
+  if (cookie.get('userId')) {
+    cookie.delete('userId', { path: '/' });
+  }
+
   redirect(301, '/');
 });
 
@@ -46,18 +49,7 @@ export default component$(() => {
   const orders = useOrders();
 
   const handleSignOut = $(() => {
-    localStorage.removeItem('userId');
-
     signOut.submit();
-  });
-
-  useVisibleTask$(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const userId = searchParams.get('userId');
-
-    if (userId) {
-      localStorage.setItem('userId', userId);
-    }
   });
 
   return (

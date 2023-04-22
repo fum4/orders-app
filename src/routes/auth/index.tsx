@@ -6,17 +6,18 @@ import { nanoid } from "nanoid";
 import Header from "~/components/header";
 import { db } from "~/firebase";
 
-export const silentSignIn = server$(async function(userId: string) {
-  console.log('userId', userId);
-  console.log('y', this);
-  const userSnapshot = await getDoc(doc(db, 'users', userId));
+export const silentSignIn = server$(async function() {
+  const userId = this.cookie.get('userId')?.value;
 
-  if (userSnapshot.exists()) {
-    const { token } = userSnapshot.data();
+  if (userId) {
+    const userSnapshot = await getDoc(doc(db, 'users', userId));
 
-    if (token === this.cookie.get('token')?.value) {
-      console.log('@@@@ everything ok');
-      return { success: true };
+    if (userSnapshot.exists()) {
+      const { token } = userSnapshot.data();
+
+      if (token === this.cookie.get('token')?.value) {
+        return { success: true };
+      }
     }
   }
 
@@ -46,7 +47,14 @@ export const useSignIn = globalAction$(async({ user, password }, { redirect, coo
         sameSite: 'strict'
       });
 
-      return redirect(302, `/admin/?userId=${dbUser.id}`);
+      cookie.set('userId', dbUser.id, {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict'
+      });
+
+      return redirect(302, '/admin');
     } catch(err) {
       console.error(err);
     }
@@ -63,14 +71,10 @@ export default component$(() => {
 
   useVisibleTask$(() => {
     (async() => {
-      const userId = localStorage.getItem('userId');
+      const { success } = await silentSignIn();
 
-      if (userId) {
-        const { success } = await silentSignIn(userId);
-
-        if (success) {
-          navigate(`/admin?userId=${userId}`)
-        }
+      if (success) {
+        navigate(`/admin`)
       }
     })()
   });
