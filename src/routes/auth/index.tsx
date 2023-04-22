@@ -37,15 +37,13 @@ export const useSignIn = globalAction$(async({ user, password }, { redirect, coo
 console.log('@@@@@@ 3', dbUser);
   if (dbUser) {
     console.log('@@@@@@ 4')
-    const nonsenseToken = nanoid();
+    const token = nanoid();
 
     try {
-      await updateDoc(doc(db, 'users', dbUser.id), {
-        token: nonsenseToken,
-      });
+      await updateDoc(doc(db, 'users', dbUser.id), { token });
       console.log('@@@@@@ 5')
 
-      cookie.set('token', nonsenseToken, {
+      cookie.set('token', token, {
         path: '/',
         httpOnly: true,
         secure: true,
@@ -53,9 +51,9 @@ console.log('@@@@@@ 3', dbUser);
       });
       console.log('@@@@@@ 6')
 
-      redirect(302, `/admin?userId=${dbUser.id}`);
+      return redirect(302, `/admin?userId=${dbUser.id}`);
 
-      return { success: true };
+      // return { success: true };
     } catch(err) {
       console.error(err);
     }
