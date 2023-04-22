@@ -47,7 +47,7 @@ const useSignOut = routeAction$((_, { cookie, redirect }) => {
 
 export default component$(() => {
   const signOut = useSignOut();
-  const orders = useOrders();
+  // const orders = useOrders();
 
   const handleSignOut = $(() => {
     signOut.submit();
@@ -68,7 +68,7 @@ export default component$(() => {
           Deconectează-te
         </button>
       </div>
-      <OrdersList orders={orders} />
+      {/*<OrdersList orders={orders} />*/}
     </>
   );
 })
