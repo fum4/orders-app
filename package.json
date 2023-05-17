@@ -23,8 +23,10 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/qwik": "0.101.0",
-    "@builder.io/qwik-city": "0.101.0",
+    "@auth/core": "^0.7.0",
+    "@builder.io/qwik": "^1.0.0",
+    "@builder.io/qwik-auth": "~0.1.0",
+    "@builder.io/qwik-city": "^1.0.0",
     "@netlify/edge-functions": "^2.0.0",
     "@types/eslint": "8.21.1",
     "@types/node": "^18.15.0",
